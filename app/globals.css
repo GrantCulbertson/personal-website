@@ -1,26 +1,60 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --cream: #E8DFCE;
+  --cream-dark: #D4C9B4;
+  --periwinkle-light: #A8B4D8;
+  --periwinkle: #8B9BC8;
+  --slate-blue: #6B7AAF;
+  --navy: #3A4369;
+  --dark: #1E2236;
+  --muted: #9A9DB5;
+  --background: var(--cream);
+  --foreground: var(--dark);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-cream: var(--cream);
+  --color-cream-dark: var(--cream-dark);
+  --color-periwinkle-light: var(--periwinkle-light);
+  --color-periwinkle: var(--periwinkle);
+  --color-slate-blue: var(--slate-blue);
+  --color-navy: var(--navy);
+  --color-dark: var(--dark);
+  --color-muted: var(--muted);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px) rotate(var(--r, 0deg)); }
+  50% { transform: translateY(-8px) rotate(var(--r, 0deg)); }
+}
+
+@keyframes float-medium {
+  0%, 100% { transform: translateY(0px) rotate(var(--r, 0deg)); }
+  50% { transform: translateY(-12px) rotate(var(--r, 0deg)); }
+}
+
+.photo-card {
+  cursor: grab;
+  user-select: none;
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.photo-card:active {
+  cursor: grabbing;
+}
+
+.photo-card:hover {
+  box-shadow: 0 20px 60px rgba(30, 34, 54, 0.25);
+  z-index: 50 !important;
 }

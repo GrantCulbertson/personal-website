@@ -1,65 +1,126 @@
 import Image from "next/image";
+import Link from "next/link";
+import FloatingGallery from "./components/FloatingGallery";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+    <main className="flex flex-col">
+      {/* Hero section — full viewport with photo overlay */}
+      <section className="relative w-full" style={{ height: "100vh", minHeight: 600 }}>
+        {/* Hero background image */}
         <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
+          src="/hero.jpg"
+          alt="Grant Culbertson"
+          fill
           priority
+          style={{ objectFit: "cover", objectPosition: "center" }}
+          sizes="100vw"
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+
+        {/* Dark overlay for text legibility */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(30,34,54,0.15) 0%, rgba(30,34,54,0.45) 60%, rgba(30,34,54,0.75) 100%)",
+          }}
+        />
+
+        {/* Hero text */}
+        <div className="absolute inset-0 flex flex-col items-center justify-end pb-20 px-8 text-center">
+          <h1
+            className="font-semibold tracking-tight"
+            style={{
+              fontSize: "clamp(3rem, 8vw, 7rem)",
+              color: "var(--cream)",
+              lineHeight: 1.05,
+              letterSpacing: "-0.03em",
+              textShadow: "0 2px 24px rgba(30,34,54,0.4)",
+            }}
+          >
+            Grant Culbertson
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+          <p
+            className="mt-4 text-lg font-light tracking-widest uppercase"
+            style={{ color: "var(--periwinkle-light)", letterSpacing: "0.2em" }}
+          >
+            Data Analyst &nbsp;·&nbsp; Chicago
+          </p>
+
+          <div className="flex gap-6 mt-8">
+            <Link
+              href="/resume"
+              className="px-6 py-3 text-sm font-medium rounded-full transition-all duration-200"
+              style={{
+                background: "var(--cream)",
+                color: "var(--navy)",
+                boxShadow: "0 4px 16px rgba(30,34,54,0.2)",
+              }}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              View Experience
+            </Link>
+            <Link
+              href="/spotify"
+              className="px-6 py-3 text-sm font-medium rounded-full border transition-all duration-200"
+              style={{
+                borderColor: "rgba(232,223,206,0.6)",
+                color: "var(--cream)",
+              }}
             >
-              Learning
-            </a>{" "}
-            center.
+              What I&apos;m Listening To
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Floating gallery section */}
+      <section
+        className="relative w-full"
+        style={{
+          height: "100vh",
+          minHeight: 700,
+          background: "var(--cream)",
+        }}
+      >
+        {/* Title overlay */}
+        <div
+          className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
+          style={{ zIndex: 10 }}
+        >
+          <h2
+            className="font-semibold select-none"
+            style={{
+              fontSize: "clamp(4rem, 12vw, 11rem)",
+              color: "rgba(58, 67, 105, 0.08)",
+              lineHeight: 1,
+              letterSpacing: "-0.04em",
+              userSelect: "none",
+            }}
+          >
+            GRANT
+          </h2>
+          <h2
+            className="font-semibold select-none"
+            style={{
+              fontSize: "clamp(4rem, 12vw, 11rem)",
+              color: "rgba(58, 67, 105, 0.08)",
+              lineHeight: 1,
+              letterSpacing: "-0.04em",
+              userSelect: "none",
+            }}
+          >
+            CULBERTSON
+          </h2>
+          <p
+            className="mt-6 text-sm tracking-widest uppercase"
+            style={{ color: "var(--muted)" }}
+          >
+            Drag the photos around
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+
+        <FloatingGallery />
+      </section>
+    </main>
   );
 }
