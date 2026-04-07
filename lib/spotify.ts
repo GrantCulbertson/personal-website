@@ -89,7 +89,7 @@ export async function getDailyHistory(): Promise<DailyHistoryResult | null> {
     const res = await fetch(url, {
       headers: { Authorization: `Bearer ${token}` },
       next: { revalidate: 3600 },
-    });
+    } as RequestInit);
     if (!res.ok) break;
     const data = await res.json();
     if (!data.items?.length) break;
