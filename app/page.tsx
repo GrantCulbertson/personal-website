@@ -1,6 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
 import FloatingGallery from "./components/FloatingGallery";
+import HomeHero from "./components/HomeHero";
 
 export default function Home() {
   return (
@@ -27,99 +27,42 @@ export default function Home() {
         />
 
         {/* Hero text */}
-        <div className="absolute inset-0 flex flex-col items-center justify-end pb-20 px-8 text-center">
-          <h1
-            className="font-semibold tracking-tight"
-            style={{
-              fontSize: "clamp(3rem, 8vw, 7rem)",
-              color: "var(--cream)",
-              lineHeight: 1.05,
-              letterSpacing: "-0.03em",
-              textShadow: "0 2px 24px rgba(30,34,54,0.4)",
-            }}
-          >
-            Grant Culbertson
-          </h1>
-          <p
-            className="mt-4 text-lg font-light tracking-widest uppercase"
-            style={{ color: "var(--periwinkle-light)", letterSpacing: "0.2em" }}
-          >
-            Data Analyst &nbsp;·&nbsp; Chicago
-          </p>
-
-          <div className="flex gap-6 mt-8">
-            <Link
-              href="/resume"
-              className="px-6 py-3 text-sm font-medium rounded-full transition-all duration-200"
-              style={{
-                background: "var(--cream)",
-                color: "var(--navy)",
-                boxShadow: "0 4px 16px rgba(30,34,54,0.2)",
-              }}
-            >
-              View Experience
-            </Link>
-            <Link
-              href="/spotify"
-              className="px-6 py-3 text-sm font-medium rounded-full border transition-all duration-200"
-              style={{
-                borderColor: "rgba(232,223,206,0.6)",
-                color: "var(--cream)",
-              }}
-            >
-              What I&apos;m Listening To
-            </Link>
-          </div>
-        </div>
+        <HomeHero />
       </section>
 
       {/* Floating gallery section */}
       <section
         className="relative w-full"
         style={{
-          height: "100vh",
           minHeight: 700,
           background: "var(--cream)",
+          paddingBottom: "4rem",
         }}
       >
-        {/* Title overlay */}
-        <div
-          className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
-          style={{ zIndex: 10 }}
-        >
+        {/* Section header */}
+        <div className="relative pt-16 pb-4 px-8 text-center" style={{ zIndex: 20 }}>
           <h2
-            className="font-semibold select-none"
+            className="font-semibold tracking-tight"
             style={{
-              fontSize: "clamp(4rem, 12vw, 11rem)",
-              color: "rgba(58, 67, 105, 0.08)",
-              lineHeight: 1,
-              letterSpacing: "-0.04em",
-              userSelect: "none",
+              fontSize: "clamp(2rem, 5vw, 3.5rem)",
+              color: "var(--navy)",
+              lineHeight: 1.1,
             }}
           >
-            GRANT
-          </h2>
-          <h2
-            className="font-semibold select-none"
-            style={{
-              fontSize: "clamp(4rem, 12vw, 11rem)",
-              color: "rgba(58, 67, 105, 0.08)",
-              lineHeight: 1,
-              letterSpacing: "-0.04em",
-              userSelect: "none",
-            }}
-          >
-            CULBERTSON
+            what I&apos;ve been up to
           </h2>
           <p
-            className="mt-6 text-sm tracking-widest uppercase"
+            className="mt-2 text-sm tracking-widest uppercase"
             style={{ color: "var(--muted)" }}
           >
             Drag the photos around
           </p>
         </div>
 
-        <FloatingGallery />
+        {/* Gallery canvas */}
+        <div className="relative" style={{ height: 600 }}>
+          <FloatingGallery />
+        </div>
       </section>
     </main>
   );

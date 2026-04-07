@@ -4,6 +4,8 @@ const SCOPES = [
   "user-read-currently-playing",
   "user-read-recently-played",
   "user-top-read",
+  "user-modify-playback-state",
+  "user-read-playback-state",
 ].join(" ");
 
 export function GET() {

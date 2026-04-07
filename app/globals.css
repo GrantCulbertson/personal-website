@@ -58,3 +58,54 @@ body {
   box-shadow: 0 20px 60px rgba(30, 34, 54, 0.25);
   z-index: 50 !important;
 }
+
+/* Fade-up entrance animation */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(36px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hidden until .page-ready is added on mount */
+.fade-up,
+.fade-up-hero {
+  opacity: 0;
+  transform: translateY(36px);
+}
+
+.page-ready .fade-up {
+  animation: fade-up 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.page-ready .fade-up-hero {
+  animation: fade-up 2s ease-in-out both;
+}
+
+/* Equalizer bar animations for Now Playing */
+@keyframes eq-bar-1 {
+  0%   { height: 4px; }
+  100% { height: 14px; }
+}
+@keyframes eq-bar-2 {
+  0%   { height: 12px; }
+  100% { height: 3px; }
+}
+@keyframes eq-bar-3 {
+  0%   { height: 6px; }
+  100% { height: 13px; }
+}
+
+.eq-bar-1 {
+  animation: eq-bar-1 0.55s ease-in-out infinite alternate;
+}
+.eq-bar-2 {
+  animation: eq-bar-2 0.7s ease-in-out infinite alternate;
+}
+.eq-bar-3 {
+  animation: eq-bar-3 0.45s ease-in-out infinite alternate;
+}
