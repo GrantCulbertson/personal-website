@@ -112,7 +112,6 @@ export default function DailyChart({ days, topGenres, mediaTypes, lit }: Props) 
   const modes: { id: ViewMode; label: string }[] = [
     { id: "total", label: "Total" },
     { id: "genre", label: "By Genre" },
-    { id: "media", label: "By Media Type" },
   ];
 
   const activeLegend = mode === "genre" ? genreLines : mode === "media" ? mediaLines : [];
