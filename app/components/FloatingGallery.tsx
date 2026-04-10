@@ -65,18 +65,22 @@ export default function FloatingGallery() {
     });
   }, [topZ]);
 
-  const onMouseDown = useCallback((e: React.MouseEvent, index: number) => {
-    e.preventDefault();
+  const startDrag = useCallback((index: number, clientX: number, clientY: number) => {
     bringToFront(index);
     dragRef.current = {
       active: true,
       index,
-      startX: e.clientX,
-      startY: e.clientY,
+      startX: clientX,
+      startY: clientY,
       origX: positions[index].x,
       origY: positions[index].y,
       moved: false,
     };
+  }, [positions, bringToFront]);
+
+  const onMouseDown = useCallback((e: React.MouseEvent, index: number) => {
+    e.preventDefault();
+    startDrag(index, e.clientX, e.clientY);
 
     const onMouseMove = (e: MouseEvent) => {
       const drag = dragRef.current;
@@ -103,7 +107,40 @@ export default function FloatingGallery() {
 
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("mouseup", onMouseUp);
-  }, [positions, bringToFront]);
+  }, [startDrag]);
+
+  const onTouchStart = useCallback((e: React.TouchEvent, index: number) => {
+    const touch = e.touches[0];
+    startDrag(index, touch.clientX, touch.clientY);
+
+    const onTouchMove = (e: TouchEvent) => {
+      e.preventDefault();
+      const drag = dragRef.current;
+      if (!drag?.active) return;
+      const touch = e.touches[0];
+      const dx = touch.clientX - drag.startX;
+      const dy = touch.clientY - drag.startY;
+      if (!drag.moved && Math.hypot(dx, dy) > DRAG_THRESHOLD) drag.moved = true;
+      if (drag.moved) {
+        setPositions((prev) => {
+          const updated = [...prev];
+          updated[drag.index] = { x: drag.origX + dx, y: drag.origY + dy };
+          return updated;
+        });
+      }
+    };
+
+    const onTouchEnd = () => {
+      const drag = dragRef.current;
+      if (drag && !drag.moved) setLightbox(drag.index);
+      dragRef.current = null;
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
+    };
+
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("touchend", onTouchEnd);
+  }, [startDrag]);
 
   if (loading) {
     return (
@@ -137,6 +174,7 @@ export default function FloatingGallery() {
                 borderRadius: "2px",
               }}
               onMouseDown={(e) => onMouseDown(e, i)}
+              onTouchStart={(e) => onTouchStart(e, i)}
             >
               <div style={{ width: layout.width, height: layout.height, overflow: "hidden", position: "relative" }}>
                 <Image
