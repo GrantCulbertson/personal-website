@@ -86,7 +86,7 @@ export async function getDailyHistory(): Promise<DailyHistoryResult | null> {
 
   // Cache each page for 1 hour to avoid hammering Spotify on every load
   for (let page = 0; page < 20 && url; page++) {
-    const res = await fetch(url, {
+    const res: Response = await fetch(url, {
       headers: { Authorization: `Bearer ${token}` },
       next: { revalidate: 3600 },
     } as RequestInit);
