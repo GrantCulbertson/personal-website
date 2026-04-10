@@ -5,7 +5,7 @@ export async function getAccessToken(): Promise<string> {
     `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`
   ).toString("base64");
 
-  const res = await fetch(TOKEN_URL, {
+  const res: Response = await fetch(TOKEN_URL, {
     method: "POST",
     headers: {
       Authorization: `Basic ${credentials}`,
@@ -24,7 +24,7 @@ export async function getAccessToken(): Promise<string> {
 
 export async function getNowPlaying() {
   const token = await getAccessToken();
-  const res = await fetch("https://api.spotify.com/v1/me/player/currently-playing", {
+  const res: Response = await fetch("https://api.spotify.com/v1/me/player/currently-playing", {
     headers: { Authorization: `Bearer ${token}` },
     cache: "no-store",
   });
@@ -34,7 +34,7 @@ export async function getNowPlaying() {
 
 export async function getRecentlyPlayed(limit = 10) {
   const token = await getAccessToken();
-  const res = await fetch(
+  const res: Response = await fetch(
     `https://api.spotify.com/v1/me/player/recently-played?limit=${limit}`,
     {
       headers: { Authorization: `Bearer ${token}` },
@@ -47,7 +47,7 @@ export async function getRecentlyPlayed(limit = 10) {
 
 export async function getTopTracks(limit = 10, time_range = "short_term") {
   const token = await getAccessToken();
-  const res = await fetch(
+  const res: Response = await fetch(
     `https://api.spotify.com/v1/me/top/tracks?limit=${limit}&time_range=${time_range}`,
     {
       headers: { Authorization: `Bearer ${token}` },
@@ -203,7 +203,7 @@ export async function getDailyMinutes() {
 
   // Paginate up to 20 pages (1000 plays) back towards Jan 1
   for (let page = 0; page < 20 && url; page++) {
-    const res = await fetch(url, {
+    const res: Response = await fetch(url, {
       headers: { Authorization: `Bearer ${token}` },
       cache: "no-store",
     });
@@ -291,7 +291,7 @@ export async function getGenreMinutes(topN = 8) {
 
 export async function getTopArtists(limit = 6, time_range = "short_term") {
   const token = await getAccessToken();
-  const res = await fetch(
+  const res: Response = await fetch(
     `https://api.spotify.com/v1/me/top/artists?limit=${limit}&time_range=${time_range}`,
     {
       headers: { Authorization: `Bearer ${token}` },
