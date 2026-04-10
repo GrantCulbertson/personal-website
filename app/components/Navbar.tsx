@@ -25,7 +25,7 @@ export default function Navbar() {
     >
       <Link
         href="/"
-        className="text-lg font-semibold tracking-tight transition-opacity duration-150 hover:opacity-60"
+        className="hidden sm:block text-lg font-semibold tracking-tight transition-opacity duration-150 hover:opacity-60"
         style={{ color: "var(--navy)" }}
       >
         GC
