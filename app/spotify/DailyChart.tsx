@@ -81,12 +81,20 @@ export default function DailyChart({ days, topGenres, mediaTypes, lit }: Props) 
     Math.round((yMax / tickCount) * i)
   );
 
-  const monthStarts: { i: number; label: string }[] = [];
-  days.forEach((d, i) => {
-    if (d.date.slice(8) === "01") {
-      monthStarts.push({ i, label: MONTH_LABELS[parseInt(d.date.slice(5, 7), 10) - 1] });
+  // Pick ~6 evenly-spaced date labels across the actual data range
+  const DATE_LABEL_COUNT = 6;
+  const dateLabels: { i: number; label: string }[] = [];
+  if (n > 1) {
+    for (let t = 0; t < DATE_LABEL_COUNT; t++) {
+      const i = Math.round((t / (DATE_LABEL_COUNT - 1)) * (n - 1));
+      const [, mm, dd] = days[i].date.split("-");
+      const label = `${MONTH_LABELS[parseInt(mm, 10) - 1]} ${parseInt(dd, 10)}`;
+      dateLabels.push({ i, label });
     }
-  });
+  } else if (n === 1) {
+    const [, mm, dd] = days[0].date.split("-");
+    dateLabels.push({ i: 0, label: `${MONTH_LABELS[parseInt(mm, 10) - 1]} ${parseInt(dd, 10)}` });
+  }
 
   function buildLine(values: number[]) {
     return values.map((v, i) => `${xOf(i).toFixed(1)},${yOf(v).toFixed(1)}`).join(" ");
@@ -234,11 +242,20 @@ export default function DailyChart({ days, topGenres, mediaTypes, lit }: Props) 
           {/* X baseline */}
           <line x1={0} y1={chartH} x2={chartW} y2={chartH} stroke={gridColor} strokeWidth={1.5} />
 
-          {/* Month labels */}
-          {monthStarts.map(({ i, label }) => (
+          {/* Date labels */}
+          {dateLabels.map(({ i, label }) => (
             <g key={label + i}>
               <line x1={xOf(i)} y1={chartH} x2={xOf(i)} y2={chartH + 5} stroke={tickColor} strokeWidth={1} />
-              <text x={xOf(i) + 2} y={chartH + 16} fontSize={11} fill={labelColor} fontWeight={500}>{label}</text>
+              <text
+                x={xOf(i)}
+                y={chartH + 18}
+                textAnchor={i === 0 ? "start" : i === n - 1 ? "end" : "middle"}
+                fontSize={11}
+                fill={labelColor}
+                fontWeight={500}
+              >
+                {label}
+              </text>
             </g>
           ))}
 
