@@ -62,6 +62,8 @@ export default function DailyChart({ days, topGenres, mediaTypes, lit }: Props) 
   const n = days.length;
 
   const xOf = (i: number) => (i / Math.max(n - 1, 1)) * chartW;
+  const lastDate = days[n - 1]?.date ?? "";
+  const isToday = lastDate === new Date().toISOString().slice(0, 10);
   const todayX = xOf(n - 1);
 
   const maxVal =
@@ -240,11 +242,13 @@ export default function DailyChart({ days, topGenres, mediaTypes, lit }: Props) 
             </g>
           ))}
 
-          {/* Today marker */}
+          {/* Today / latest marker */}
           <g>
             <line x1={todayX} y1={0} x2={todayX} y2={chartH}
               stroke={todayColor} strokeWidth={1} strokeDasharray="3 3" opacity={0.6} />
-            <text x={todayX - 4} y={-7} textAnchor="end" fontSize={9} fill={todayColor}>today</text>
+            {isToday && (
+              <text x={todayX - 4} y={-7} textAnchor="end" fontSize={9} fill={todayColor}>today</text>
+            )}
           </g>
         </g>
       </svg>

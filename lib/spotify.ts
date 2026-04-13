@@ -145,25 +145,15 @@ export async function getDailyHistory(): Promise<DailyHistoryResult | null> {
     dayMap[date].byMediaType[mediaType] = (dayMap[date].byMediaType[mediaType] ?? 0) + mins;
   }
 
-  // Fill Jan 1 → today
-  const today = new Date();
-  const days: DayHistory[] = [];
-  const d = new Date(yearStart);
-  while (d <= today) {
-    const key = d.toISOString().slice(0, 10);
-    const entry = dayMap[key];
-    days.push({
+  // Only include days that have actual listening data, sorted chronologically
+  const days: DayHistory[] = Object.entries(dayMap)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([key, entry]) => ({
       date: key,
-      total: entry ? Math.round(entry.total) : 0,
-      byGenre: entry
-        ? Object.fromEntries(Object.entries(entry.byGenre).map(([g, m]) => [g, Math.round(m)]))
-        : {},
-      byMediaType: entry
-        ? Object.fromEntries(Object.entries(entry.byMediaType).map(([t, m]) => [t, Math.round(m)]))
-        : {},
-    });
-    d.setDate(d.getDate() + 1);
-  }
+      total: Math.round(entry.total),
+      byGenre: Object.fromEntries(Object.entries(entry.byGenre).map(([g, m]) => [g, Math.round(m)])),
+      byMediaType: Object.fromEntries(Object.entries(entry.byMediaType).map(([t, m]) => [t, Math.round(m)])),
+    }));
 
   // Top 6 genres by total
   const genreTotals: Record<string, number> = {};
