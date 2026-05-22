@@ -237,7 +237,7 @@ export default function ResumePage() {
                 Bachelor of Arts, Economics with Distinction, Cum Laude
               </p>
               <p className="text-sm mt-1" style={{ color: textMuted }}>
-                Minors in Statistics &amp; Scientific Computing · GPA: 3.63
+                Minors in Statistics &amp; Scientific Computing · GPA: 3.61
               </p>
               <div className="mt-4 space-y-2">
                 <Detail label="Research" textSecondary={textSecondary} textMuted={textMuted}>
