@@ -152,6 +152,7 @@ export default function ResumePage() {
                     "Solely responsible for implementation and maintenance of 25+ company-wide process automations through N8N, streamlining internal workflows.",
                     "Built a custom internal reporting system for test monitoring and automated client reporting, replacing paid tools.",
                     "Identified gaps and automated numerous data quality checks, improving reliability of A/B test data reporting pipelines.",
+                    "Worked as the sole analyst at the company while performing this role.",
                   ],
                 },
                 {
@@ -307,7 +308,7 @@ export default function ResumePage() {
               />
               <SkillGroup
                 label="Tools"
-                items={["Google Looker Studio", "BigQuery", "Shopify", "Excel", "Google Analytics", "ClickUp", "N8N", "Claude", "ChatGPT"]}
+                items={["Google Looker Studio", "BigQuery", "Shopify", "Excel", "Google Analytics", "ClickUp", "N8N", "Claude", "ChatGPT", "Claude Code", "Claude Cowork", "Cursor", "Github", "Rstudio"]}
                 textMuted={textMuted}
                 textPrimary={textPrimary}
               />
