@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { DayHistory } from "@/lib/spotify";
+import { nearestIndexFromX } from "./chartGeometry";
 
 type ViewMode = "total" | "genre" | "media";
 
@@ -34,6 +35,7 @@ interface Props {
 
 export default function DailyChart({ days, topGenres, mediaTypes, lit }: Props) {
   const [mode, setMode] = useState<ViewMode>("total");
+  const [hoverIndex, setHoverIndex] = useState<number | null>(null);
 
   const gridColor    = lit ? "rgba(255,255,255,0.08)" : "var(--cream-dark)";
   const tickColor    = lit ? "rgba(255,255,255,0.4)"  : "var(--muted)";
@@ -126,6 +128,17 @@ export default function DailyChart({ days, topGenres, mediaTypes, lit }: Props) 
 
   const activeLegend = mode === "genre" ? genreLines : mode === "media" ? mediaLines : [];
 
+  // Translate a mouse position into the nearest data-point index. The SVG
+  // scales to its container, so we map screen coords back into viewBox units
+  // via the current transform matrix, then strip the left padding.
+  function handleHover(e: React.MouseEvent<SVGSVGElement>) {
+    const svg = e.currentTarget;
+    const screenCtm = svg.getScreenCTM();
+    if (!screenCtm) return;
+    const local = new DOMPoint(e.clientX, e.clientY).matrixTransform(screenCtm.inverse());
+    setHoverIndex(nearestIndexFromX(local.x - PAD.left, n, chartW));
+  }
+
   return (
     <div className="p-5">
       {/* Toggle buttons + legend */}
@@ -172,6 +185,8 @@ export default function DailyChart({ days, topGenres, mediaTypes, lit }: Props) 
         width="100%"
         style={{ overflow: "visible" }}
         aria-label="Plays per day"
+        onMouseMove={handleHover}
+        onMouseLeave={() => setHoverIndex(null)}
       >
         <defs>
           <linearGradient id="total-grad" x1="0" y1="0" x2="0" y2="1">
@@ -267,6 +282,60 @@ export default function DailyChart({ days, topGenres, mediaTypes, lit }: Props) 
               <text x={todayX - 4} y={-7} textAnchor="end" fontSize={9} fill={todayColor}>today</text>
             )}
           </g>
+
+          {/* Hover guide, dot(s), and tooltip */}
+          {hoverIndex !== null && days[hoverIndex] && (() => {
+            const i = hoverIndex;
+            const hx = xOf(i);
+            const [, mm, dd] = days[i].date.split("-");
+            const header = `${MONTH_LABELS[parseInt(mm, 10) - 1]} ${parseInt(dd, 10)}`;
+
+            const isGenre = mode === "genre";
+            const dots = isGenre
+              ? genreLines.map(g => ({ color: g.color, label: g.label, value: g.values[i] }))
+              : [{ color: lit ? "rgba(255,255,255,0.95)" : "#3A4369", label: "Plays", value: totalValues[i] }];
+
+            const lineH = 15, padX = 9, headerH = 17;
+            const measure = [header, ...dots.map(d => isGenre ? `${d.label}${d.value}` : `${d.value} plays`)];
+            const boxW = Math.max(...measure.map(s => s.length)) * 6.3 + padX * 2 + (isGenre ? 26 : 0);
+            const boxH = headerH + dots.length * lineH + 7;
+
+            const flip = hx > chartW * 0.6;
+            const boxX = Math.max(0, Math.min(flip ? hx - boxW - 12 : hx + 12, chartW - boxW));
+
+            return (
+              <g style={{ pointerEvents: "none" }}>
+                <line x1={hx} y1={0} x2={hx} y2={chartH}
+                  stroke={lit ? "rgba(255,255,255,0.35)" : "rgba(58,67,105,0.35)"} strokeWidth={1} />
+                {dots.map((d, di) => (
+                  <circle key={di} cx={hx} cy={yOf(d.value)} r={3.5} fill={d.color}
+                    stroke={lit ? "rgba(20,22,34,0.9)" : "white"} strokeWidth={1.5} />
+                ))}
+                <rect x={boxX} y={0} width={boxW} height={boxH} rx={6}
+                  fill={lit ? "rgba(20,22,34,0.92)" : "rgba(255,255,255,0.97)"}
+                  stroke={lit ? "rgba(255,255,255,0.18)" : "var(--cream-dark)"} strokeWidth={1} />
+                <text x={boxX + padX} y={13} fontSize={11} fontWeight={600} fill={lit ? "white" : "var(--dark)"}>{header}</text>
+                {isGenre
+                  ? dots.map((d, di) => {
+                      const ry = headerH + di * lineH;
+                      return (
+                        <g key={di}>
+                          <rect x={boxX + padX} y={ry + 2} width={8} height={8} rx={2} fill={d.color} />
+                          <text x={boxX + padX + 13} y={ry + 9.5} fontSize={10.5}
+                            fill={lit ? "rgba(255,255,255,0.75)" : "var(--slate-blue)"}>{d.label}</text>
+                          <text x={boxX + boxW - padX} y={ry + 9.5} textAnchor="end" fontSize={10.5} fontWeight={600}
+                            fill={lit ? "white" : "var(--navy)"}>{d.value}</text>
+                        </g>
+                      );
+                    })
+                  : (
+                    <text x={boxX + padX} y={headerH + 9.5} fontSize={11} fill={lit ? "rgba(255,255,255,0.85)" : "var(--navy)"}>
+                      <tspan fontWeight={600}>{totalValues[i]}</tspan> plays
+                    </text>
+                  )}
+              </g>
+            );
+          })()}
         </g>
       </svg>
     </div>
