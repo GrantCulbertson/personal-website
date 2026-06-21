@@ -164,7 +164,7 @@ export default function SpotifyContent({ notSetUp, topTracksData, topArtistsData
 
             {/* Daily minutes chart */}
             <section className="fade-up" style={{ animationDelay: "0.46s" }}>
-              <SectionLabel color={labelText}>Minutes Listened by Day · Recent History</SectionLabel>
+              <SectionLabel color={labelText}>Plays by Day · Year to Date</SectionLabel>
               <div style={card} className="rounded-2xl">
                 <DailyChart days={days ?? []} topGenres={topGenres ?? []} mediaTypes={mediaTypes ?? []} lit={lit} />
               </div>

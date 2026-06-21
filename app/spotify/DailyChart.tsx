@@ -171,7 +171,7 @@ export default function DailyChart({ days, topGenres, mediaTypes, lit }: Props) 
         viewBox={`0 0 ${SVG_W} ${SVG_H}`}
         width="100%"
         style={{ overflow: "visible" }}
-        aria-label="Minutes listened per day"
+        aria-label="Plays per day"
       >
         <defs>
           <linearGradient id="total-grad" x1="0" y1="0" x2="0" y2="1">
@@ -195,7 +195,7 @@ export default function DailyChart({ days, topGenres, mediaTypes, lit }: Props) 
             textAnchor="middle" fontSize={9} fill={tickColor} letterSpacing={1}
             transform={`rotate(-90, -36, ${chartH / 2})`}
           >
-            MINUTES
+            PLAYS
           </text>
 
           {/* Chart lines */}
