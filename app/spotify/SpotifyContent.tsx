@@ -168,6 +168,9 @@ export default function SpotifyContent({ notSetUp, topTracksData, topArtistsData
               <div style={card} className="rounded-2xl">
                 <DailyChart days={days ?? []} topGenres={topGenres ?? []} mediaTypes={mediaTypes ?? []} lit={lit} />
               </div>
+              <p className="text-xs mt-3" style={{ color: mutedText, transition: "color 0.8s ease" }}>
+                data from last.fm scrobbles
+              </p>
             </section>
           </div>
         )}
