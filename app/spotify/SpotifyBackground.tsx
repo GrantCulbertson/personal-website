@@ -1,32 +1,21 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { fetchNowPlayingState, type NowPlayingState } from "./nowPlayingClient";
 
-export interface NowPlayingState {
-  isPlaying: boolean;
-  isLastPlayed?: boolean;
-  albumArt?: string;
-  title?: string;
-  artist?: string;
-  album?: string;
-  songUrl?: string;
-  trackUri?: string;
-  progressMs?: number;
-  durationMs?: number;
-}
+export type { NowPlayingState };
 
 // Shared context so both this and NowPlaying don't double-poll
 let sharedState: NowPlayingState = { isPlaying: false };
 const listeners = new Set<(s: NowPlayingState) => void>();
 
 async function fetchNowPlaying() {
-  try {
-    const res = await fetch("/api/spotify/now-playing");
-    const json: NowPlayingState = await res.json();
+  // Resilient fetch (retries transient failures) so a blip on page load
+  // doesn't leave the card blank until the next 30s poll.
+  const json = await fetchNowPlayingState();
+  if (json) {
     sharedState = json;
     listeners.forEach((fn) => fn(json));
-  } catch {
-    // ignore
   }
 }
 

@@ -28,7 +28,7 @@ export async function getNowPlaying() {
     headers: { Authorization: `Bearer ${token}` },
     cache: "no-store",
   });
-  if (res.status === 204 || res.status > 400) return null;
+  if (res.status === 204 || res.status >= 400) return null;
   return res.json();
 }
 
