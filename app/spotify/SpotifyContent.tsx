@@ -169,7 +169,20 @@ export default function SpotifyContent({ notSetUp, topTracksData, topArtistsData
                 <DailyChart days={days ?? []} topGenres={topGenres ?? []} mediaTypes={mediaTypes ?? []} lit={lit} />
               </div>
               <p className="text-xs mt-3" style={{ color: mutedText, transition: "color 0.8s ease" }}>
-                data from last.fm scrobbles
+                data from last.fm scrobbles (powered by{" "}
+                <a
+                  href="https://github.com/GrantCulbertson/spotify-seasonal"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    color: lit ? "rgba(168,180,216,0.9)" : "var(--slate-blue)",
+                    textDecoration: "underline",
+                    textUnderlineOffset: "2px",
+                  }}
+                >
+                  spotify-seasonal
+                </a>
+                )
               </p>
             </section>
           </div>
