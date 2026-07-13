@@ -186,9 +186,10 @@ export default function ResumePage() {
                   title: "Life Insurance Agent",
                   period: "5/2023 – 8/2023",
                   bullets: [
-                    "Obtained Series 6 insurance license, passing the exam on the first attempt.",
-                    "Learned adaptable customer service skills through a variety of difficult situations.",
-                    "Handled direct sales as well as coverage and cost projections for expected client needs before meetings.",
+                    "Earned an Ohio resident insurance producer license (Major Lines: Life, Accident & Health), passing the exam on the first attempt.",
+                    "Conducted prospecting outreach by phone and direct mail, and handled day-to-day client service requests, including difficult or escalated conversations.",
+                    "Owned the bulk of client meeting prep: quotes across a range of coverage amounts and policy types, plus multi-year cost projections comparing plan options.",
+                    "Co-facilitated client meetings in person and by phone alongside the advisor.",
                   ],
                 },
               ]}
