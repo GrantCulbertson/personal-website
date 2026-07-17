@@ -14,8 +14,8 @@ async function fetchNowPlaying() {
   // doesn't leave the card blank until the next 30s poll.
   const json = await fetchNowPlayingState();
   if (json) {
-    sharedState = json;
-    listeners.forEach((fn) => fn(json));
+    sharedState = { ...json, loaded: true };
+    listeners.forEach((fn) => fn(sharedState));
   }
 }
 

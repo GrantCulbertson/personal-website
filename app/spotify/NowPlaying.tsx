@@ -16,10 +16,27 @@ export default function NowPlaying({ isLit }: { isLit?: boolean }) {
   const btnBg       = isLit ? "rgba(255,255,255,0.12)" : "var(--cream)";
   const btnHoverBg  = isLit ? "rgba(255,255,255,0.2)"  : "var(--cream-dark)";
 
-  // Show skeleton on first render
-  if (!data.isPlaying && !data.isLastPlayed && data.albumArt === undefined) {
+  // Still fetching the first response — show an explicit loading state
+  // instead of a blank card.
+  if (!data.loaded) {
     return (
-      <div className="rounded-2xl p-6 animate-pulse" style={{ ...cardStyle, height: 100 }} />
+      <div className="rounded-2xl p-5 flex items-center gap-5" style={cardStyle}>
+        <div
+          className="rounded-lg flex-shrink-0 flex items-center justify-center"
+          style={{ width: 64, height: 64, background: isLit ? "rgba(255,255,255,0.10)" : "var(--cream)" }}
+        >
+          <svg className="animate-spin" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <circle cx="12" cy="12" r="9" stroke={progressBg} strokeWidth="2.5" opacity="0.6" />
+            <path d="M21 12a9 9 0 0 0-9-9" stroke="#1DB954" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+        </div>
+        <div className="flex-1 min-w-0">
+          <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: textMuted }}>
+            Loading…
+          </span>
+          <p className="text-sm mt-1" style={{ color: textPrimary }}>Fetching your Spotify activity</p>
+        </div>
+      </div>
     );
   }
 

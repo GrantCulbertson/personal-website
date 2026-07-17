@@ -1,5 +1,8 @@
 export interface NowPlayingState {
   isPlaying: boolean;
+  // Set once the first fetch has resolved; distinguishes "still loading" from
+  // "loaded, but nothing is playing". Undefined until the first response.
+  loaded?: boolean;
   isLastPlayed?: boolean;
   albumArt?: string;
   title?: string;
