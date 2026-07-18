@@ -24,10 +24,15 @@ export async function getAccessToken(): Promise<string> {
 
 export async function getNowPlaying() {
   const token = await getAccessToken();
-  const res: Response = await fetch("https://api.spotify.com/v1/me/player/currently-playing", {
-    headers: { Authorization: `Bearer ${token}` },
-    cache: "no-store",
-  });
+  // additional_types=episode is required or Spotify returns item: null while
+  // a podcast episode is playing (the endpoint only recognizes tracks by default).
+  const res: Response = await fetch(
+    "https://api.spotify.com/v1/me/player/currently-playing?additional_types=episode",
+    {
+      headers: { Authorization: `Bearer ${token}` },
+      cache: "no-store",
+    },
+  );
   if (res.status === 204 || res.status >= 400) return null;
   return res.json();
 }

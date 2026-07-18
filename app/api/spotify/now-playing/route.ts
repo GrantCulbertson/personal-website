@@ -1,22 +1,14 @@
 import { NextResponse } from "next/server";
 import { getNowPlaying, getRecentlyPlayed } from "@/lib/spotify";
+import { mapCurrentlyPlaying } from "@/lib/nowPlayingMapper";
 
 export async function GET() {
   try {
     const data = await getNowPlaying();
+    const mapped = mapCurrentlyPlaying(data);
 
-    if (data?.is_playing) {
-      return NextResponse.json({
-        isPlaying: true,
-        title: data.item?.name,
-        artist: data.item?.artists?.map((a: { name: string }) => a.name).join(", "),
-        album: data.item?.album?.name,
-        albumArt: data.item?.album?.images?.[0]?.url,
-        songUrl: data.item?.external_urls?.spotify,
-        trackUri: data.item?.uri,
-        progressMs: data.progress_ms,
-        durationMs: data.item?.duration_ms,
-      });
+    if (mapped) {
+      return NextResponse.json(mapped);
     }
 
     // Nothing playing — fall back to last played track
