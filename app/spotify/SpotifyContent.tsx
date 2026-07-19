@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import NowPlaying from "./NowPlaying";
 import DailyChart from "./DailyChart";
 import { useNowPlaying } from "./SpotifyBackground";
+import { getBackgroundMode } from "./backgroundMode";
 
 import type { DayHistory } from "@/lib/spotify";
 
@@ -44,8 +45,10 @@ export default function SpotifyContent({ notSetUp, topTracksData, topArtistsData
   const { isPlaying, isLastPlayed, albumArt } = useNowPlaying();
   const [ready, setReady] = useState(false);
   useEffect(() => { setReady(true); }, []);
-  // Switch to dark/lit mode whenever there's album art — playing or last played
-  const lit = (isPlaying || !!isLastPlayed) && !!albumArt;
+  // Dark/lit mode whenever a session is active — with cover art (blurred
+  // behind the page) or without it (e.g. a local file), which falls back
+  // to the resume page's static background instead of the plain light theme.
+  const lit = getBackgroundMode(isPlaying || !!isLastPlayed, !!albumArt) !== "none";
 
   // Dynamic style helpers
   const pageText    = lit ? "rgba(255,255,255,0.9)"   : "var(--dark)";

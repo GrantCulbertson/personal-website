@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { fetchNowPlayingState, type NowPlayingState } from "./nowPlayingClient";
+import { getBackgroundMode } from "./backgroundMode";
 
 export type { NowPlayingState };
 
@@ -48,7 +49,7 @@ export default function SpotifyBackground() {
     if (albumArt) prevArt.current = albumArt;
   }, [albumArt]);
 
-  const visible = (isPlaying || !!isLastPlayed) && !!displayArt;
+  const mode = getBackgroundMode(isPlaying || !!isLastPlayed, !!displayArt);
 
   return (
     <div
@@ -59,32 +60,61 @@ export default function SpotifyBackground() {
         zIndex: 0,
         pointerEvents: "none",
         transition: "opacity 1.2s ease",
-        opacity: visible ? 1 : 0,
+        opacity: mode === "none" ? 0 : 1,
       }}
     >
-      {/* Blurred, saturated album art */}
-      {displayArt && (
-        <div
-          style={{
-            position: "absolute",
-            inset: "-80px",
-            backgroundImage: `url(${displayArt})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            filter: "blur(72px) saturate(1.8) brightness(0.7)",
-            transform: "scale(1.25)",
-          }}
-        />
+      {mode === "art" && (
+        <>
+          {/* Blurred, saturated album art */}
+          <div
+            style={{
+              position: "absolute",
+              inset: "-80px",
+              backgroundImage: `url(${displayArt})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              filter: "blur(72px) saturate(1.8) brightness(0.7)",
+              transform: "scale(1.25)",
+            }}
+          />
+          {/* Dark gradient so content stays readable */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background:
+                "linear-gradient(160deg, rgba(10,10,20,0.72) 0%, rgba(10,10,20,0.82) 100%)",
+            }}
+          />
+        </>
       )}
-      {/* Dark gradient so content stays readable */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          background:
-            "linear-gradient(160deg, rgba(10,10,20,0.72) 0%, rgba(10,10,20,0.82) 100%)",
-        }}
-      />
+
+      {mode === "fallback" && (
+        <>
+          {/* No cover art (e.g. a local file) — reuse the resume page's
+              hero background so the page doesn't fall back to the plain
+              light theme mid-session. */}
+          <div
+            style={{
+              position: "absolute",
+              inset: "-60px",
+              backgroundImage: "url(/hero.jpg)",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              filter: "blur(24px) saturate(1.8) brightness(0.9)",
+              transform: "scale(1.1)",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background:
+                "linear-gradient(160deg, rgba(10,12,30,0.45) 0%, rgba(10,12,30,0.55) 100%)",
+            }}
+          />
+        </>
+      )}
     </div>
   );
 }
