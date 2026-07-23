@@ -5,8 +5,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import NowPlaying from "./NowPlaying";
 import DailyChart from "./DailyChart";
-import { useNowPlaying } from "./SpotifyBackground";
-import { getBackgroundMode } from "./backgroundMode";
 
 import type { DayHistory } from "@/lib/spotify";
 
@@ -42,13 +40,13 @@ function msToMin(ms: number) {
 }
 
 export default function SpotifyContent({ notSetUp, topTracksData, topArtistsData, days, topGenres, mediaTypes }: Props) {
-  const { isPlaying, isLastPlayed, albumArt } = useNowPlaying();
   const [ready, setReady] = useState(false);
   useEffect(() => { setReady(true); }, []);
-  // Dark/lit mode whenever a session is active — with cover art (blurred
-  // behind the page) or without it (e.g. a local file), which falls back
-  // to the resume page's static background instead of the plain light theme.
-  const lit = getBackgroundMode(isPlaying || !!isLastPlayed, !!albumArt) !== "none";
+  // Background is always dark now — either blurred album art, or the
+  // resume page's static hero background in every other case (paused,
+  // nothing playing, a local file with no art, etc) — so the cards/text
+  // always use the lit theme once Spotify is connected.
+  const lit = true;
 
   // Dynamic style helpers
   const pageText    = lit ? "rgba(255,255,255,0.9)"   : "var(--dark)";

@@ -40,7 +40,7 @@ export function useNowPlaying() {
 }
 
 export default function SpotifyBackground() {
-  const { isPlaying, isLastPlayed, albumArt } = useNowPlaying();
+  const { albumArt } = useNowPlaying();
   const prevArt = useRef<string | undefined>(undefined);
 
   // Keep previous art visible while transitioning
@@ -49,7 +49,7 @@ export default function SpotifyBackground() {
     if (albumArt) prevArt.current = albumArt;
   }, [albumArt]);
 
-  const mode = getBackgroundMode(isPlaying || !!isLastPlayed, !!displayArt);
+  const mode = getBackgroundMode(!!displayArt);
 
   return (
     <div
@@ -59,8 +59,6 @@ export default function SpotifyBackground() {
         inset: 0,
         zIndex: 0,
         pointerEvents: "none",
-        transition: "opacity 1.2s ease",
-        opacity: mode === "none" ? 0 : 1,
       }}
     >
       {mode === "art" && (
